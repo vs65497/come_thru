@@ -1,1 +1,136 @@
-this is the party member page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>iPhone Client</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body {
+      background: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin:0;
+    }
+    #iphone {
+      width: 375px;
+      height: 667px;
+      background: url('https://wallpaperaccess.com/full/317501.jpg') no-repeat center center;
+      background-size: cover;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      position: relative;
+      color:white;
+    }
+    #screen {
+      width:100%;
+      height:100%;
+      position:relative;
+    }
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      grid-gap:20px;
+      padding:40px 20px;
+    }
+    .app {
+      width:50px;
+      height:50px;
+      background: rgba(255,255,255,0.2);
+      border-radius:12px;
+    }
+    .notification {
+      position: absolute;
+      top:-100px;
+      left:10px;
+      right:10px;
+      background: rgba(255,255,255,0.9);
+      color:black;
+      border-radius:16px;
+      padding:15px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.4);
+      display:flex;
+      flex-direction:column;
+      opacity:0;
+      transition: all 0.4s ease;
+      z-index:999;
+    }
+    .notification.show {
+      top:20px;
+      opacity:1;
+    }
+    .notif-message {
+      font-size:15px;
+      margin-bottom:10px;
+    }
+    .notif-actions {
+      text-align:right;
+    }
+    .notif-actions button {
+      margin-left:5px;
+      background:#007aff;
+      border:none;
+      color:white;
+      padding:6px 12px;
+      font-size:13px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    .notif-actions button.decline {
+      background:#ccc;
+      color:black;
+    }
+  </style>
+</head>
+<body>
+  <div id="iphone">
+    <div id="screen">
+      <div class="apps">
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+        <div class="app"></div>
+      </div>
+      <div class="notification" id="notification">
+        <div class="notif-message"></div>
+        <div class="notif-actions">
+          <button class="accept">Accept</button>
+          <button class="decline">Decline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkNotification() {
+      const msg = localStorage.getItem('client_notification');
+      if (msg) {
+        $('#notification .notif-message').text(msg);
+        $('#notification').addClass('show');
+
+        // Remove it so it doesn't keep popping
+        localStorage.removeItem('client_notification');
+      }
+    }
+
+    setInterval(checkNotification, 2000);
+
+    $('.accept').click(function(){
+      alert('You accepted the invitation!');
+      localStorage.setItem('sender_response', 'Accepted');
+      $('#notification').removeClass('show');
+    });
+
+    $('.decline').click(function(){
+      $('#notification').removeClass('show');
+    });
+  </script>
+</body>
+</html>
