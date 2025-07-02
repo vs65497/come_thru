@@ -1,1 +1,151 @@
-this is the host page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>iPhone Sender</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body {
+      background: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin:0;
+    }
+    #iphone {
+      width: 375px;
+      height: 667px;
+      background: url('https://wallpaperaccess.com/full/317501.jpg') no-repeat center center;
+      background-size: cover;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: white;
+      position: relative;
+    }
+    #header {
+      text-align: center;
+      padding: 20px 10px 10px 10px;
+      background: rgba(0,0,0,0.3);
+    }
+    #header h2 {
+      margin:0;
+      font-weight: 600;
+      font-size:18px;
+    }
+    #header p {
+      margin:5px 0 0;
+      font-size: 14px;
+      opacity:0.9;
+    }
+    .activity-list {
+      margin:10px;
+      overflow-y: auto;
+      max-height:500px;
+    }
+    .activity {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      border-radius:10px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+    .thumbnail {
+      width:40px;
+      height:40px;
+      border-radius:8px;
+      background:#666;
+      margin-right:10px;
+      flex-shrink:0;
+    }
+    .activity-name {
+      flex:1;
+      font-size:16px;
+    }
+    .time-select button {
+      background: rgba(255,255,255,0.2);
+      border:none;
+      color:white;
+      padding:5px 8px;
+      margin:0 2px;
+      border-radius:6px;
+      font-size:12px;
+      cursor:pointer;
+      transition: background 0.3s;
+    }
+    .time-select button.active {
+      background: rgba(255,255,255,0.6);
+      color:black;
+    }
+  </style>
+</head>
+<body>
+  <div id="iphone">
+    <div id="header">
+      <h2 id="dateHeader"></h2>
+      <p id="timeSubheading"></p>
+    </div>
+    <div class="activity-list">
+      <div class="activity" data-activity="Gaming">
+        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/video-game.png') center/cover;"></div>
+        <div class="activity-name">Gaming</div>
+        <div class="time-select">
+          <button data-time="Morning">Morning</button>
+          <button data-time="Afternoon">Afternoon</button>
+          <button data-time="Evening">Evening</button>
+        </div>
+      </div>
+      <div class="activity" data-activity="Gym">
+        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/dumbbell.png') center/cover;"></div>
+        <div class="activity-name">Gym</div>
+        <div class="time-select">
+          <button data-time="Morning">Morning</button>
+          <button data-time="Afternoon">Afternoon</button>
+          <button data-time="Evening">Evening</button>
+        </div>
+      </div>
+      <div class="activity" data-activity="Eating at McDonald's">
+        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/hamburger.png') center/cover;"></div>
+        <div class="activity-name">Eating at McDonald's</div>
+        <div class="time-select">
+          <button data-time="Morning">Morning</button>
+          <button data-time="Afternoon">Afternoon</button>
+          <button data-time="Evening">Evening</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Update date and time
+    function updateDateTime() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+      const timeStr = now.toLocaleTimeString();
+      $('#dateHeader').text(dateStr);
+      $('#timeSubheading').text(`Today's activities - 4hours 20minutes`);
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Handle time selection
+    $('.time-select button').click(function() {
+      const parent = $(this).closest('.time-select');
+      parent.find('button').removeClass('active');
+      $(this).addClass('active');
+
+      const activity = $(this).closest('.activity').data('activity');
+      const time = $(this).data('time');
+      const message = `${activity} planned for ${time}.`;
+
+      // Simulate sending notification
+      localStorage.setItem('client_notification', message);
+
+      alert(`Notification sent: ${message}`);
+    });
+  </script>
+</body>
+</html>
