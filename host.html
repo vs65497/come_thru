@@ -128,9 +128,36 @@
         </div>
       </div>
     </div>
+    <div id="recentActivities" style="padding:10px; font-size:14px; color:#fff;">
+      <h3 style="margin:10px 0; font-size:16px;">Recent Activities</h3>
+      <ul id="activityLog" style="list-style:none; padding:0; margin:0;"></ul>
+    </div>
   </div>
 
   <script>
+    function renderHistory() {
+      let history = JSON.parse(localStorage.getItem('activity_history') || '[]');
+      const log = $('#activityLog');
+      log.empty();
+
+      history.forEach(item => {
+        const li = $('<li>').css({
+          marginBottom: '8px',
+          background: 'rgba(255,255,255,0.1)',
+          padding: '6px',
+          borderRadius: '6px'
+        });
+        li.html(
+          `<strong>${item.activity}</strong> (${item.time})<br>
+          <small>${new Date(item.timestamp).toLocaleString()}</small><br>
+          Status: <em>${item.status}</em>${item.responseTime ? ' at ' + new Date(item.responseTime).toLocaleTimeString() : ''}`
+        );
+        log.append(li);
+      });
+    }
+
+    renderHistory();
+
     // Update date and time
     function updateDateTime() {
       const now = new Date();
@@ -152,11 +179,48 @@
       const time = $(this).data('time');
       const message = `${activity} planned for ${time}.`;
 
-      // Simulate sending notification
-      localStorage.setItem('client_notification', message);
+      // Build an activity record
+      const record = {
+        activity: activity,
+        time: time,
+        message: message,
+        timestamp: new Date().toISOString(),
+        status: 'Pending'
+      };
+
+      // Save to client notification (simulate signal)
+      localStorage.setItem('client_notification', JSON.stringify(record));
+
+      // Store in local history
+      let history = JSON.parse(localStorage.getItem('activity_history') || '[]');
+      history.unshift(record); // add to the top
+      localStorage.setItem('activity_history', JSON.stringify(history));
 
       alert(`Notification sent: ${message}`);
+
+      // Re-render activity log
+      renderHistory();
     });
+
+    function checkResponse() {
+      const resp = localStorage.getItem('sender_response');
+      if (resp) {
+        const response = JSON.parse(resp);
+
+        let history = JSON.parse(localStorage.getItem('activity_history') || '[]');
+        if (history.length > 0 && history[0].status === 'Pending') {
+          history[0].status = response.status;
+          history[0].responseTime = response.timestamp;
+          localStorage.setItem('activity_history', JSON.stringify(history));
+          renderHistory();
+        }
+
+        // Clear it so it doesn't keep updating
+        localStorage.removeItem('sender_response');
+      }
+    }
+
+    setInterval(checkResponse, 2000);
   </script>
 </body>
 </html>
