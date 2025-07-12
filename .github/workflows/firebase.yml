@@ -17,18 +17,20 @@ jobs:
       - name: Prepare public folder
         run: mkdir -p public
 
-      - name: Inject secret
+      - name: Inject API key
         run: |
-          echo "window.FIREBASE_API_KEY = atob('${{ secrets.FIREBASE_API_KEY_BASE64 }}');" > public/guitartracks.js
-          echo "Injected config:"
-          cat public/guitartracks.js
-          
-      - name: List public folder
-        run: ls -l public
+          echo "window.FIREBASE_API_KEY = atob('${{ secrets.FIREBASE_API_KEY_BASE64 }}');" > public/z.js
+
+      - name: Debug check
+        run: |
+          echo "--- Contents of ./public ---"
+          find public
+          echo "--- z.js ---"
+          cat public/z.js
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-
+          force_orphan: true
