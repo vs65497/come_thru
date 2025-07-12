@@ -19,7 +19,7 @@ jobs:
 
       - name: Inject secret
         run: |
-          echo "window['_f'] = '${{ secrets.FIREBASE_API_KEY }}';" > public/guitartracks.js
+          echo "window.FIREBASE_API_KEY = atob('${{ secrets.FIREBASE_API_KEY_BASE64 }}');" > public/guitartracks.js
           echo "Injected config:"
           cat public/guitartracks.js
           
