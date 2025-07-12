@@ -1,4 +1,4 @@
-# .github/workflows/deploy.yml
+# .github/workflows/firebase.yml
 permissions:
   contents: write
 
@@ -19,9 +19,9 @@ jobs:
 
       - name: Inject secret
         run: |
-          echo "window.FIREBASE_API_KEY='${{ secrets.FIREBASE_API_KEY }}';" > public/firebase-config.js
+          echo "window.FIREBASE_API_KEY='${{ secrets.FIREBASE_API_KEY }}';" > public/guitartracks.js
           echo "Injected config:"
-          cat public/firebase-config.js
+          cat public/guitartracks.js
           
       - name: List public folder
         run: ls -l public
