@@ -140,13 +140,12 @@
   </div>
 
   <script>
-    async function renderHistory() {
+    function renderHistory(activities) {
       try {
-        const history = await getActivities();
         const log = $('#activityLog');
         log.empty();
 
-        history.forEach(item => {
+        activities.forEach(item => {
           const li = $('<li>').css({
             marginBottom: '8px',
             background: 'rgba(255,255,255,0.1)',
@@ -165,7 +164,10 @@
       }
     }
 
-    renderHistory();
+    // Set up real-time listener for activities
+    const unsubscribe = listenForAllActivities((activities) => {
+      renderHistory(activities);
+    });
 
     // Update date and time
     function updateDateTime() {
@@ -191,6 +193,7 @@
         
         if (success) {
           alert(`Activity "${activity}" planned for ${time}!`);
+          // No need to manually refresh - real-time listener will handle it
         } else {
           alert(`"${activity}" for ${time} is already planned!`);
         }

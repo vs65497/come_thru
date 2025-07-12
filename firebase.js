@@ -77,3 +77,13 @@ function getActivities() {
         return [];
     });
 }
+
+// Listen for all activity changes (for host page)
+function listenForAllActivities(callback) {
+  return db.collection('activities_planned')
+    .orderBy('timestamp', 'desc')
+    .onSnapshot(snapshot => {
+      const activities = snapshot.docs.map(doc => doc.data());
+      callback(activities);
+    });
+}
