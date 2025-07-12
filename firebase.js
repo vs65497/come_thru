@@ -1,41 +1,82 @@
-
-// Firebase config from environment variables
+// Firebase Configuration
 const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
+    // apiKey: window.FIREBASE_API_KEY,
+    // authDomain: window.FIREBASE_AUTH_DOMAIN,
+    // projectId: window.FIREBASE_PROJECT_ID,
+
+    apiKey: "AIzaSyDI4BFAN9qVjyqwuGNiNyrBMrmizFIeunE",
+    authDomain: "come-thru-e056c.firebaseapp.com",
+    projectId: "come-thru-e056c",
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Test database connection
-async function testDatabaseConnection() {
-    try {
-        // Test writing data
-        const testDoc = await db.collection('test').add({
-            message: 'Database connection test',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        console.log('✅ Database write test successful! Document ID:', testDoc.id);
-        
-        // Test reading data
-        const snapshot = await db.collection('test').limit(1).get();
-        console.log('✅ Database read test successful! Found', snapshot.size, 'documents');
-        
-        return true;
-    } catch (error) {
-        console.error('❌ Database connection failed:', error);
-        return false;
+// Simple function to add activity (no duplicates)
+async function addActivity(activity, time) {
+  try {
+    const activityId = `${activity}_${time}`;
+    
+    // Check if this activity already exists
+    const existingActivity = await db.collection('activities_planned').doc(activityId).get();
+    
+    if (existingActivity.exists) {
+      console.log('Activity already exists');
+      return false; // Already exists
     }
+    
+    // Add new activity
+    await db.collection('activities_planned').doc(activityId).set({
+      activity: activity,
+      time: time,
+      timestamp: new Date().toISOString(),
+      status: 'pending'
+    });
+    
+    console.log('Activity added successfully');
+    return true; // Successfully added
+  } catch (error) {
+    console.error('Error adding activity:', error);
+    return false;
+  }
 }
 
-// Actually run the test
-testDatabaseConnection().then(success => {
-    if (success) {
-        console.log('🎉 Database connection test completed successfully!');
-    } else {
-        console.log('💥 Database connection test failed!');
-    }
-});
+// Listen for new activities (for party page)
+function listenForActivities(callback) {
+  return db.collection('activities_planned')
+    .where('status', '==', 'pending')
+    .onSnapshot(snapshot => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          callback({
+            id: change.doc.id,
+            ...change.doc.data()
+          });
+        }
+      });
+    });
+}
+
+// Update activity status (accept/decline)
+async function updateActivityStatus(activityId, status) {
+  try {
+    await db.collection('activities_planned').doc(activityId).update({
+      status: status,
+      responseTime: new Date().toISOString()
+    });
+    console.log('Activity status updated to:', status);
+  } catch (error) {
+    console.error('Error updating activity status:', error);
+  }
+}
+
+function getActivities() {
+    return db.collection('activities_planned').get().then(snapshot => {
+        console.log('Activities:', snapshot.docs.map(doc => doc.data()));
+        return snapshot.docs.map(doc => doc.data());
+    }).catch(error => {
+        console.error('Error getting activities:', error);
+        return [];
+    });
+}

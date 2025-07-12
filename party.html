@@ -125,37 +125,49 @@
   </div>
 
   <script>
-    function checkNotification() {
-      const msg = localStorage.getItem('client_notification');
-      if (msg) {
-        $('#notification .notif-message').text(msg);
-        $('#notification').addClass('show');
+    let currentActivityId = null;
 
-        // Remove it so it doesn't keep popping
-        localStorage.removeItem('client_notification');
+    // Listen for new activities
+    const unsubscribe = listenForActivities((activity) => {
+      console.log('New activity received:', activity);
+      
+      // Show notification
+      $('#notification .notif-message').text(`${activity.activity} planned for ${activity.time}`);
+      $('#notification').addClass('show');
+      
+      // Store the activity ID for response handling
+      currentActivityId = activity.id;
+    });
+
+    // Handle accept button
+    $('.accept').click(async function(){
+      if (currentActivityId) {
+        try {
+          await updateActivityStatus(currentActivityId, 'accepted');
+          alert('You accepted the invitation!');
+          $('#notification').removeClass('show');
+          currentActivityId = null;
+        } catch (error) {
+          console.error('Error accepting invitation:', error);
+          alert('Error accepting invitation. Please try again.');
+        }
       }
-    }
+    });
 
-    setInterval(checkNotification, 2000);
-
-  $('.accept').click(function(){
-    alert('You accepted the invitation!');
-    const response = {
-      status: 'Accepted',
-      timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('sender_response', JSON.stringify(response));
-    $('#notification').removeClass('show');
-  });
-
-  $('.decline').click(function(){
-    const response = {
-      status: 'Declined',
-      timestamp: new Date().toISOString()
-    };
-    localStorage.setItem('sender_response', JSON.stringify(response));
-    $('#notification').removeClass('show');
-  });
+    // Handle decline button
+    $('.decline').click(async function(){
+      if (currentActivityId) {
+        try {
+          await updateActivityStatus(currentActivityId, 'declined');
+          alert('You declined the invitation.');
+          $('#notification').removeClass('show');
+          currentActivityId = null;
+        } catch (error) {
+          console.error('Error declining invitation:', error);
+          alert('Error declining invitation. Please try again.');
+        }
+      }
+    });
   </script>
 </body>
 </html>
