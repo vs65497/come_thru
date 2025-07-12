@@ -5,6 +5,7 @@ const firebaseConfig = {
     projectId: window.FIREBASE_PROJECT_ID,
 };
 
+console.log(firebaseConfig);
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
