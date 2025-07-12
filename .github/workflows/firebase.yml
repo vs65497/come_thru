@@ -13,10 +13,10 @@ jobs:
 
       - name: Inject secret
         run: |
-          echo "window.FIREBASE_API_KEY='${{ secrets.FIREBASE_API_KEY }}';" > public/firebase-config.js
+          echo "window.FIREBASE_API_KEY='${{ secrets.FIREBASE_API_KEY }}';" > firebase-config.js
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./
