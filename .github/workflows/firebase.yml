@@ -1,4 +1,7 @@
 # .github/workflows/deploy.yml
+permissions:
+  contents: write
+
 name: Build and Deploy
 
 on:
