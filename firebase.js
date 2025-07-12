@@ -1,9 +1,9 @@
 // Firebase Configuration
 const firebaseConfig = {
-    apiKey: window.FIREBASE_API_KEY,
-    authDomain: window.FIREBASE_AUTH_DOMAIN,
-    projectId: window.FIREBASE_PROJECT_ID,
-};
+  apiKey: "AIzaSyDI4BFAN9qVjyqwuGNiNyrBMrmizFIeunE",
+  authDomain: "come-thru-e056c.firebaseapp.com",
+  projectId: "come-thru-e056c",
+}
 
 console.log(firebaseConfig);
 // Initialize Firebase
