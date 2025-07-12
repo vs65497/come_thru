@@ -1,3 +1,28 @@
-<script>
-  console.log(window.FIREBASE_API_KEY = 'your_actual_key');
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Firebase Demo</title>
+  <!-- Load the Firebase config file -->
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+  <h1>My Firebase App</h1>
+
+  <!-- Your Firebase setup code -->
+  <script type="module">
+    // Import Firebase if you're using modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: window.FIREBASE_API_KEY,
+      authDomain: "your-project.firebaseapp.com",
+      projectId: "your-project-id",
+      // etc.
+    };
+
+    const app = initializeApp(firebaseConfig);
+    console.log("Firebase initialized!", app);
+  </script>
+</body>
+</html>
