@@ -138,15 +138,24 @@
 
     setInterval(checkNotification, 2000);
 
-    $('.accept').click(function(){
-      alert('You accepted the invitation!');
-      localStorage.setItem('sender_response', 'Accepted');
-      $('#notification').removeClass('show');
-    });
+  $('.accept').click(function(){
+    alert('You accepted the invitation!');
+    const response = {
+      status: 'Accepted',
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('sender_response', JSON.stringify(response));
+    $('#notification').removeClass('show');
+  });
 
-    $('.decline').click(function(){
-      $('#notification').removeClass('show');
-    });
+  $('.decline').click(function(){
+    const response = {
+      status: 'Declined',
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('sender_response', JSON.stringify(response));
+    $('#notification').removeClass('show');
+  });
   </script>
 </body>
 </html>
