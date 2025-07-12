@@ -14,8 +14,10 @@
     // Import Firebase if you're using modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
 
+    const apiKey = window['_f'];
+
     const firebaseConfig = {
-      apiKey: window.FIREBASE_API_KEY,
+      apiKey: apiKey,
       authDomain: "come-thru-e056c.firebaseapp.com",
       projectId: "come-thru-e056c",
       storageBucket: "come-thru-e056c.firebasestorage.app",
