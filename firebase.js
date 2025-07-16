@@ -12,20 +12,13 @@ const db = firebase.firestore();
 // Global variables for host page
 let processedResponses = new Set(); // Track processed responses to avoid duplicates
 
-// Simple function to add activity (no duplicates)
+// Add or update activity (replaces old timing for same activity)
 async function addActivity(activity, time) {
   try {
-    const activityId = `${activity}_${time}`;
+    // Use activity name as document ID (this will replace any existing timing for the same activity)
+    const activityId = activity.replace(/\s+/g, '_').toLowerCase();
     
-    // Check if this activity already exists
-    const existingActivity = await db.collection('activities_planned').doc(activityId).get();
-    
-    if (existingActivity.exists) {
-      console.log('Activity already exists');
-      return false; // Already exists
-    }
-    
-    // Add new activity
+    // Add or update activity (this will overwrite if it exists)
     await db.collection('activities_planned').doc(activityId).set({
       activity: activity,
       time: time,
@@ -33,10 +26,10 @@ async function addActivity(activity, time) {
       status: 'pending'
     });
     
-    console.log('Activity added successfully');
-    return true; // Successfully added
+    console.log(`Activity "${activity}" set for ${time}`);
+    return true; // Successfully added/updated
   } catch (error) {
-    console.error('Error adding activity:', error);
+    console.error('Error adding/updating activity:', error);
     return false;
   }
 }
@@ -174,6 +167,9 @@ function initializeHostPage() {
   const unsubscribe = listenForAllActivities((activities) => {
     renderHistory(activities);
     
+    // Update button states based on current activities
+    updateButtonStates(activities);
+    
     // Check for new responses
     activities.forEach(activity => {
       if (activity.status && activity.status !== 'pending' && activity.responseTime) {
@@ -193,17 +189,39 @@ function initializeHostPage() {
   // Handle time selection
   $('.time-select button').click(async function() {
     const parent = $(this).closest('.time-select');
-    parent.find('button').removeClass('active');
-    $(this).addClass('active');
-
     const activity = $(this).closest('.activity').data('activity');
     const time = $(this).data('time');
 
     try {
-      // Add activity to Firebase (no duplicates)
+      // Add/update activity in Firebase (this will replace any existing timing)
       const success = await addActivity(activity, time);
+      
+      if (success) {
+        // Update button states immediately for better UX
+        // parent.find('button').removeClass('active');
+        $(this).addClass('active');
+        
+        console.log(`Updated ${activity} to ${time}`);
+      }
     } catch (error) {
-      console.error('Error adding activity:', error);
+      console.error('Error adding/updating activity:', error);
+    }
+  });
+}
+
+// Update button states based on current activities in database
+function updateButtonStates(activities) {
+  // Clear all active states first
+  $('.time-select button').removeClass('active');
+  
+  // Set active state for current selections
+  activities.forEach(activity => {
+    // Add active class for both pending and accepted activities
+    if (activity.status === 'pending' || activity.status === 'accepted') {
+      const activityElement = $(`.activity[data-activity="${activity.activity}"]`);
+      if (activityElement.length > 0) {
+        activityElement.find(`button[data-time="${activity.time}"]`).addClass('active');
+      }
     }
   });
 }
