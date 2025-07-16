@@ -88,6 +88,85 @@
       background: rgba(255,255,255,0.6);
       color:black;
     }
+    
+    /* Notification styles */
+    .notification {
+      position: absolute;
+      top: -100px;
+      left: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.95);
+      color: black;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 999;
+      border-left: 4px solid #007aff;
+    }
+    .notification.show {
+      top: 20px;
+      opacity: 1;
+    }
+    .notification.accepted {
+      border-left-color: #34c759;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .notification.declined {
+      border-left-color: #ff3b30;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .notif-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .notif-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+    }
+    .notif-icon.accepted {
+      background: #34c759;
+    }
+    .notif-icon.declined {
+      background: #ff3b30;
+    }
+    .notif-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .notif-message {
+      font-size: 14px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .notif-actions {
+      text-align: right;
+    }
+    .notif-actions button {
+      background: #007aff;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .notif-actions button:hover {
+      background: #0056b3;
+    }
+    
     @media (max-width: 768px), (orientation: portrait) {
       body {
         margin: 0;
@@ -104,6 +183,18 @@
 </head>
 <body>
   <div id="iphone">
+    <!-- Response notification -->
+    <div class="notification" id="responseNotification">
+      <div class="notif-header">
+        <div class="notif-icon" id="notifIcon">✓</div>
+        <div class="notif-title" id="notifTitle">Response Received</div>
+      </div>
+      <div class="notif-message" id="notifMessage"></div>
+      <div class="notif-actions">
+        <button onclick="dismissNotification()">OK</button>
+      </div>
+    </div>
+    
     <div id="header">
       <h2 id="dateHeader"></h2>
       <p id="timeSubheading"></p>
@@ -139,74 +230,14 @@
     </div>
     <div id="recentActivities" style="padding:10px; font-size:14px; color:#fff; height: 180px; overflow: hidden;">
       <h3 style="margin:10px 0; font-size:16px;">Recent Activities</h3>
-      <ul id="activityLog" style="list-style:none; padding:0; margin:0;overflow-y: auto;height: 220px;"></ul>
+      <ul id="activityLog" style="list-style:none; padding:0; margin:0;overflow-y: auto;height: 150px;"></ul>
     </div>
   </div>
 
   <script>
-    function renderHistory(activities) {
-      try {
-        const log = $('#activityLog');
-        log.empty();
-
-        activities.forEach(item => {
-          const li = $('<li>').css({
-            marginBottom: '8px',
-            background: 'rgba(255,255,255,0.1)',
-            padding: '6px',
-            borderRadius: '6px'
-          });
-          li.html(
-            `<strong>${item.activity}</strong> (${item.time})<br>
-            <small>${new Date(item.timestamp).toLocaleString()}</small><br>
-            Status: <em>${item.status}</em>${item.responseTime ? ' at ' + new Date(item.responseTime).toLocaleTimeString() : ''}`
-          );
-          log.append(li);
-        });
-      } catch (error) {
-        console.error('Error rendering history:', error);
-      }
-    }
-
-    // Set up real-time listener for activities
-    const unsubscribe = listenForAllActivities((activities) => {
-      renderHistory(activities);
-    });
-
-    // Update date and time
-    function updateDateTime() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-      const timeStr = now.toLocaleTimeString(undefined, { hour12: false });
-      $('#dateHeader').text(dateStr);
-      $('#timeSubheading').text(timeStr);
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-
-    // Handle time selection
-    $('.time-select button').click(async function() {
-      const parent = $(this).closest('.time-select');
-      parent.find('button').removeClass('active');
-      $(this).addClass('active');
-
-      const activity = $(this).closest('.activity').data('activity');
-      const time = $(this).data('time');
-
-      try {
-        // Add activity to Firebase (no duplicates)
-        const success = await addActivity(activity, time);
-        
-        if (success) {
-          alert(`Activity "${activity}" planned for ${time}!`);
-          // No need to manually refresh - real-time listener will handle it
-        } else {
-          alert(`"${activity}" for ${time} is already planned!`);
-        }
-      } catch (error) {
-        console.error('Error adding activity:', error);
-        alert('Error adding activity. Please try again.');
-      }
+    // Initialize host page when document is ready
+    $(document).ready(function() {
+      initializeHostPage();
     });
   </script>
 </body>

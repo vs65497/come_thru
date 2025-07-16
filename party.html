@@ -129,48 +129,9 @@
   </div>
 
   <script>
-    let currentActivityId = null;
-
-    // Listen for new activities
-    const unsubscribe = listenForActivities((activity) => {
-      console.log('New activity received:', activity);
-      
-      // Show notification
-      $('#notification .notif-message').text(`${activity.activity} planned for ${activity.time}`);
-      $('#notification').addClass('show');
-      
-      // Store the activity ID for response handling
-      currentActivityId = activity.id;
-    });
-
-    // Handle accept button
-    $('.accept').click(async function(){
-      if (currentActivityId) {
-        try {
-          await updateActivityStatus(currentActivityId, 'accepted');
-          alert('You accepted the invitation!');
-          $('#notification').removeClass('show');
-          currentActivityId = null;
-        } catch (error) {
-          console.error('Error accepting invitation:', error);
-          alert('Error accepting invitation. Please try again.');
-        }
-      }
-    });
-
-    // Handle decline button
-    $('.decline').click(async function(){
-      if (currentActivityId) {
-        try {
-          await updateActivityStatus(currentActivityId, 'declined');
-          alert('You declined the invitation.');
-          $('#notification').removeClass('show');
-          currentActivityId = null;
-        } catch (error) {
-          console.error('Error declining invitation:', error);
-          alert('Error declining invitation. Please try again.');
-        }
-      }
+    // Initialize party page when document is ready
+    $(document).ready(function() {
+      initializePartyPage();
     });
   </script>
 </body>
