@@ -1,0 +1,864 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+@media screen and (min-width: 440px) {
+    body {
+        max-width: 414px;
+        margin: auto;
+    }
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    position: relative;
+    z-index: 10;
+}
+
+.time {
+    font-weight: 700;
+}
+
+.status-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.signal-bars {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+}
+
+.bar {
+    width: 3px;
+    background: white;
+    border-radius: 1px;
+}
+
+.bar:nth-child(1) {
+    height: 4px;
+}
+
+.bar:nth-child(2) {
+    height: 6px;
+}
+
+.bar:nth-child(3) {
+    height: 8px;
+}
+
+.bar:nth-child(4) {
+    height: 10px;
+}
+
+.network-type {
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.battery-icon {
+    width: 25px;
+    height: 12px;
+    border: 1px solid white;
+    border-radius: 2px;
+    position: relative;
+    margin-left: 4px;
+}
+
+.battery-level {
+    background: #ff4444;
+    height: 100%;
+    width: 15%;
+    border-radius: 1px;
+}
+
+.battery-tip {
+    position: absolute;
+    right: -4px;
+    top: 3px;
+    width: 2px;
+    height: 6px;
+    background: white;
+    border-radius: 0 1px 1px 0;
+}
+
+.maps-widget {
+    width: calc(100% - 40px);
+    margin: auto;
+    margin-top: 20px;
+    height: 150px;
+    background: rgba(100, 130, 160, 0.8);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-area {
+    flex: 1;
+    background: linear-gradient(45deg, #6b8db5 0%, #4a6b8a 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background-image: url('assets/map.png');
+}
+
+
+.home-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 150, 220, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.widget-info {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+.widget-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.widget-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.moon-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0.2;
+}
+
+.date-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    font-weight: 300;
+    margin-bottom: 40px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.moon {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 70% 30%, #ffffff 0%, #f5f5f5 40%, #e8e8e8 100%);
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+    border-radius: 50%;
+}
+
+.search-bar {
+    position: absolute;
+    bottom: 125px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    width: 200px;
+}
+
+.search-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+.dock {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 35px;
+    padding: 15px 25px;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.dock-app {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+    font-size: 24px;
+}
+
+.phone-app {
+    background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+}
+
+.safari-app {
+    background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+    position: relative;
+}
+
+.safari-needle {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: white;
+    border-radius: 1px;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    transform-origin: bottom;
+}
+
+.safari-circle {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border: 2px solid white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.messages-app {
+    background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+    position: relative;
+}
+
+.message-bubble {
+    position: absolute;
+    width: 35px;
+    height: 25px;
+    background: white;
+    border-radius: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.message-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 8px;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    transform: skew(-30deg);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff3b30;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.sky-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.cloud {
+    position: absolute;
+    opacity: 0.2;
+}
+
+.cloud:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation: float 20s infinite ease-in-out;
+}
+
+.cloud:nth-child(2) {
+    top: 30%;
+    right: 20%;
+    animation: float 25s infinite ease-in-out reverse;
+}
+
+.cloud:nth-child(3) {
+    top: 60%;
+    left: 20%;
+    animation: float 30s infinite ease-in-out;
+}
+
+.cloud:nth-child(4) {
+    top: 15%;
+    right: 10%;
+    animation: float 35s infinite ease-in-out;
+}
+
+.cloud:nth-child(5) {
+    top: 70%;
+    right: 30%;
+    animation: float 28s infinite ease-in-out reverse;
+}
+
+.cloud:nth-child(6) {
+    top: 45%;
+    left: 5%;
+    animation: float 40s infinite ease-in-out;
+}
+
+.cloud:nth-child(7) {
+    top: 25%;
+    left: 60%;
+    animation: float 32s infinite ease-in-out reverse;
+}
+
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.star {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+.star:nth-child(1) {
+    top: 15%;
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.star:nth-child(2) {
+    top: 25%;
+    left: 80%;
+    animation-delay: 0.5s;
+}
+
+.star:nth-child(3) {
+    top: 35%;
+    left: 30%;
+    animation-delay: 1s;
+}
+
+.star:nth-child(4) {
+    top: 45%;
+    left: 85%;
+    animation-delay: 1.5s;
+}
+
+.star:nth-child(5) {
+    top: 55%;
+    left: 15%;
+    animation-delay: 2s;
+}
+
+.star:nth-child(6) {
+    top: 65%;
+    left: 70%;
+    animation-delay: 2.5s;
+}
+
+.star:nth-child(7) {
+    top: 10%;
+    left: 60%;
+    animation-delay: 0.8s;
+}
+
+.star:nth-child(8) {
+    top: 20%;
+    left: 40%;
+    animation-delay: 1.2s;
+}
+
+.star:nth-child(9) {
+    top: 40%;
+    left: 10%;
+    animation-delay: 1.8s;
+}
+
+.star:nth-child(10) {
+    top: 75%;
+    left: 50%;
+    animation-delay: 0.3s;
+}
+
+.star:nth-child(11) {
+    top: 8%;
+    left: 85%;
+    animation-delay: 2.2s;
+}
+
+.star:nth-child(12) {
+    top: 50%;
+    left: 60%;
+    animation-delay: 1.6s;
+}
+
+.star-small {
+    font-size: 8px;
+    opacity: 0.6;
+}
+
+.star-medium {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.star-large {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.shooting-star {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: shoot 4s infinite ease-out;
+    opacity: 0;
+}
+
+.shooting-star::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, white, transparent);
+    transform: translateX(-100%);
+}
+
+.nebula {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, rgba(79, 70, 229, 0.05) 50%, transparent 100%);
+    border-radius: 50%;
+    animation: pulse 6s infinite ease-in-out;
+}
+
+.nebula:nth-child(2) {
+    top: 65%;
+    left: 10%;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, rgba(168, 85, 247, 0.04) 50%, transparent 100%);
+    animation-delay: 2s;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+
+    25% {
+        transform: translateX(10px) translateY(-5px);
+    }
+
+    50% {
+        transform: translateX(-5px) translateY(10px);
+    }
+
+    75% {
+        transform: translateX(5px) translateY(-5px);
+    }
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes shoot {
+    0% {
+        opacity: 0;
+        transform: translateX(0) translateY(0);
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-200px) translateY(100px);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+#iphone {
+    overflow: hidden;
+    color: white;
+    position: relative;
+    max-width: calc(100% - 40px);
+    margin: auto;
+}
+
+#header {
+    text-align: center;
+    padding: 20px 10px 10px 10px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#header h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+#header p {
+    margin: 5px 0 0;
+    font-size: 45px;
+    opacity: 0.9;
+}
+
+.activity-list {
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.activity {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #666;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.activity-name {
+    flex: 1;
+    font-size: 16px;
+}
+
+.time-select button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 5px 8px;
+    margin: 0 2px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.time-select button.active {
+    background: rgba(255, 255, 255, 0.6);
+    color: black;
+}
+
+/* Notification styles */
+.notification {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: black;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 999;
+    border-left: 4px solid #007aff;
+}
+
+.notification.show {
+    top: 20px;
+    opacity: 1;
+}
+
+.notification.accepted {
+    border-left-color: #34c759;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.notification.declined {
+    border-left-color: #ff3b30;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.notif-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.notif-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+}
+
+.notif-icon.accepted {
+    background: #34c759;
+}
+
+.notif-icon.declined {
+    background: #ff3b30;
+}
+
+.notif-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.notif-message {
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.notif-actions {
+    text-align: right;
+}
+
+.notif-actions button {
+    background: #007aff;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.notif-actions button:hover {
+    background: #0056b3;
+}
+
+@media (max-width: 768px),
+(orientation: portrait) {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #iphone {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+}
+
+
+.apps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.widget-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.app-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.app-name {
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.weather-widget {
+    background: rgba(30, 50, 100, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 2;
+    min-height: 120px;
+}
+
+.weather-widget div:first-child {
+    opacity: 0.8;
+}
+
+.weather-widget div:nth-child(2) {
+    line-height: 1;
+    margin: 8px 0;
+}
+
+.weather-widget div:nth-child(3) {
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.weather-widget div:last-child {
+    opacity: 0.7;
+}

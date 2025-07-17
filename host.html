@@ -1,244 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>iPhone Sender</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <style>
-    body {
-      background: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin:0;
-      font-family: 'Open Sans', sans-serif;
-    }
-    #iphone {
-      width: 375px;
-      height: 667px;
-      background: url('iphone-bg.jpeg') no-repeat center center;
-      background-size: cover;
-      border-radius: 50px;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(0,0,0,0.8);
-      font-family: 'Open Sans', sans-serif;
-      color: white;
-      position: relative;
-    }
-    #header {
-      text-align: center;
-      padding: 20px 10px 10px 10px;
-      background: rgba(0,0,0,0.3);
-    }
-    #header h2 {
-      margin:0;
-      font-weight: 600;
-      font-size:18px;
-    }
-    #header p {
-      margin:5px 0 0;
-      font-size: 45px;
-      opacity:0.9;
-    }
-    .activity-list {
-      margin:10px;
-      overflow-y: auto;
-      max-height:500px;
-    }
-    .activity {
-      display: flex;
-      align-items: center;
-      background: rgba(255,255,255,0.1);
-      border-radius:10px;
-      padding:10px;
-      margin-bottom:10px;
-    }
-    .thumbnail {
-      width:40px;
-      height:40px;
-      border-radius:8px;
-      background:#666;
-      margin-right:10px;
-      flex-shrink:0;
-    }
-    .activity-name {
-      flex:1;
-      font-size:16px;
-    }
-    .time-select button {
-      background: rgba(255,255,255,0.2);
-      border:none;
-      color:white;
-      padding:5px 8px;
-      margin:0 2px;
-      border-radius:6px;
-      font-size:12px;
-      cursor:pointer;
-      transition: background 0.3s;
-    }
-    .time-select button.active {
-      background: rgba(255,255,255,0.6);
-      color:black;
-    }
-    
-    /* Notification styles */
-    .notification {
-      position: absolute;
-      top: -100px;
-      left: 10px;
-      right: 10px;
-      background: rgba(255,255,255,0.95);
-      color: black;
-      border-radius: 16px;
-      padding: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      opacity: 0;
-      transition: all 0.4s ease;
-      z-index: 999;
-      border-left: 4px solid #007aff;
-    }
-    .notification.show {
-      top: 20px;
-      opacity: 1;
-    }
-    .notification.accepted {
-      border-left-color: #34c759;
-      background: rgba(255, 255, 255, 0.9);
-    }
-    .notification.declined {
-      border-left-color: #ff3b30;
-      background: rgba(255, 255, 255, 0.9);
-    }
-    .notif-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .notif-icon {
-      width: 24px;
-      height: 24px;
-      margin-right: 8px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: white;
-    }
-    .notif-icon.accepted {
-      background: #34c759;
-    }
-    .notif-icon.declined {
-      background: #ff3b30;
-    }
-    .notif-title {
-      font-weight: 600;
-      font-size: 16px;
-    }
-    .notif-message {
-      font-size: 14px;
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-    .notif-actions {
-      text-align: right;
-    }
-    .notif-actions button {
-      background: #007aff;
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .notif-actions button:hover {
-      background: #0056b3;
-    }
-    
-    @media (max-width: 768px), (orientation: portrait) {
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #iphone {
-        width: 100vw;
-        height: 100vh;
-        border-radius: 0;
-      }
-    }
-  </style>
-  <script src="firebase.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Lock Screen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="firebase.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div id="iphone">
     <!-- Response notification -->
     <div class="notification" id="responseNotification">
-      <div class="notif-header">
-        <div class="notif-icon" id="notifIcon">✓</div>
-        <div class="notif-title" id="notifTitle">Response Received</div>
-      </div>
-      <div class="notif-message" id="notifMessage"></div>
-      <div class="notif-actions">
-        <button onclick="dismissNotification()">OK</button>
-      </div>
-    </div>
-    
-    <div id="header">
-      <h2 id="dateHeader"></h2>
-      <p id="timeSubheading"></p>
-    </div>
-    <div class="activity-list">
-      <div class="activity" data-activity="Gaming">
-        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/video-game.png') center/cover;"></div>
-        <div class="activity-name">Gaming</div>
-        <div class="time-select">
-          <button data-time="Morning">Morning</button>
-          <button data-time="Afternoon">Afternoon</button>
-          <button data-time="Evening">Evening</button>
+        <div class="notif-header">
+            <div class="notif-icon" id="notifIcon">✓</div>
+            <div class="notif-title" id="notifTitle">Response Received</div>
         </div>
-      </div>
-      <div class="activity" data-activity="Gym">
-        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/dumbbell.png') center/cover;"></div>
-        <div class="activity-name">Gym</div>
-        <div class="time-select">
-          <button data-time="Morning">Morning</button>
-          <button data-time="Afternoon">Afternoon</button>
-          <button data-time="Evening">Evening</button>
+        <div class="notif-message" id="notifMessage"></div>
+        <div class="notif-actions">
+            <button onclick="dismissNotification()">OK</button>
         </div>
-      </div>
-      <div class="activity" data-activity="Eating at McDonald's">
-        <div class="thumbnail" style="background: url('https://img.icons8.com/emoji/48/hamburger.png') center/cover;"></div>
-        <div class="activity-name">Eating at McDonald's</div>
-        <div class="time-select">
-          <button data-time="Morning">Morning</button>
-          <button data-time="Afternoon">Afternoon</button>
-          <button data-time="Evening">Evening</button>
+    </div>
+    <div class="sky-elements">
+        <!-- Stars -->
+        <div class="stars">
+            <div class="star star-small">✦</div>
+            <div class="star star-medium">✦</div>
+            <div class="star star-large">✦</div>
+            <div class="star star-small">✧</div>
+            <div class="star star-medium">✧</div>
+            <div class="star star-small">✦</div>
+            <div class="star star-large">✧</div>
+            <div class="star star-medium">✦</div>
+            <div class="star star-small">✧</div>
+            <div class="star star-medium">✦</div>
+            <div class="star star-small">✧</div>
+            <div class="star star-large">✦</div>
         </div>
-      </div>
-    </div>
-    <div id="recentActivities" style="padding:10px; font-size:14px; color:#fff; height: 180px; overflow: hidden;">
-      <h3 style="margin:10px 0; font-size:16px;">Recent Activities</h3>
-      <ul id="activityLog" style="list-style:none; padding:0; margin:0;overflow-y: auto;height: 150px;"></ul>
-    </div>
-  </div>
 
-  <script>
-    // Initialize host page when document is ready
-    $(document).ready(function() {
-      initializeHostPage();
-    });
-  </script>
+        <!-- Shooting Star -->
+        <div class="shooting-star"></div>
+
+        <!-- Nebula Effects -->
+        <div class="nebula"></div>
+        <div class="nebula"></div>
+
+        <!-- Clouds -->
+        <div class="cloud">
+            <svg width="100" height="40" viewBox="0 0 100 40" fill="none">
+                <path d="M25 30C15 30 8 23 8 15C8 7 15 2 25 2C30 2 35 4 38 8C40 6 43 5 46 5C54 5 60 11 60 18C65 18 70 22 70 28C70 34 65 35 60 35H25C20 35 15 32 15 28C15 25 18 22 22 21C23 20 24 19 25 18V30Z" fill="rgba(255,255,255,0.8)"/>
+            </svg>
+        </div>
+        <div class="cloud">
+            <svg width="80" height="30" viewBox="0 0 80 30" fill="none">
+                <path d="M20 25C12 25 6 19 6 13C6 7 12 3 20 3C24 3 28 5 30 8C32 6 35 5 38 5C44 5 48 9 48 15C52 15 56 18 56 23C56 28 52 29 48 29H20C16 29 12 26 12 23C12 21 14 19 17 18C18 17 19 16 20 15V25Z" fill="rgba(255,255,255,0.8)"/>
+            </svg>
+        </div>
+        <div class="cloud">
+            <svg width="60" height="25" viewBox="0 0 60 25" fill="none">
+                <path d="M15 20C9 20 5 16 5 11C5 6 9 3 15 3C18 3 21 4 23 6C24 5 26 4 28 4C33 4 36 7 36 12C39 12 42 14 42 18C42 22 39 23 36 23H15C12 23 9 21 9 18C9 16 11 15 13 14C14 13 14 12 15 12V20Z" fill="rgba(255,255,255,0.8)"/>
+            </svg>
+        </div>
+        <div class="cloud">
+            <svg width="90" height="35" viewBox="0 0 90 35" fill="none">
+                <path d="M22 28C14 28 8 22 8 16C8 9 14 5 22 5C26 5 30 7 32 10C34 8 37 7 40 7C47 7 52 12 52 18C56 18 60 21 60 26C60 31 56 32 52 32H22C18 32 14 29 14 26C14 24 16 22 19 21C20 20 21 19 22 18V28Z" fill="rgba(255,255,255,0.8)"/>
+            </svg>
+        </div>
+        <div class="cloud">
+            <svg width="70" height="28" viewBox="0 0 70 28" fill="none">
+                <path d="M18 23C12 23 7 19 7 14C7 8 12 4 18 4C21 4 24 6 26 8C27 7 29 6 31 6C36 6 40 10 40 15C43 15 46 17 46 21C46 25 43 26 40 26H18C15 26 12 24 12 21C12 19 14 18 16 17C17 16 17 15 18 15V23Z" fill="rgba(255,255,255,0.8)"/>
+            </svg>
+        </div>
+        
+        <!-- Wispy Clouds -->
+        <div class="cloud">
+            <svg width="120" height="20" viewBox="0 0 120 20" fill="none">
+                <path d="M10 15C5 15 2 12 2 8C2 4 5 2 10 2C15 2 20 3 25 4C30 5 35 6 40 6C50 6 60 7 70 8C80 9 90 10 100 10C110 10 115 12 115 15C115 18 110 18 100 18C90 18 80 17 70 16C60 15 50 14 40 14C35 14 30 15 25 15C20 15 15 15 10 15Z" fill="rgba(255,255,255,0.4)"/>
+            </svg>
+        </div>
+        
+        <!-- Cirrus Clouds -->
+        <div class="cloud">
+            <svg width="150" height="15" viewBox="0 0 150 15" fill="none">
+                <path d="M5 10C2 10 1 8 1 6C1 4 2 3 5 3C10 3 15 4 25 4C35 4 45 5 60 5C75 5 90 6 110 6C130 6 140 7 145 8C148 9 149 10 145 12C140 13 130 12 110 12C90 12 75 11 60 11C45 11 35 10 25 10C15 10 10 10 5 10Z" fill="rgba(255,255,255,0.3)"/>
+            </svg>
+        </div>
+
+        <div class="moon-container">
+            <div class="moon"></div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div class="time">
+            <p id="timeSubheading"></p>
+        </div>
+        <div class="status-right">
+            <div class="signal-bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="network-type">5G</div>
+            <div class="battery">
+                <div class="battery-icon">
+                    <div class="battery-level"></div>
+                    <div class="battery-tip"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="maps-widget">
+        <div class="map-area">
+            <div class="map-lines"></div>
+            <div class="home-icon">🏠</div>
+        </div>
+        <div class="widget-info">
+            <div class="widget-title">Home</div>
+        </div>
+        <div class="widget-label">Maps</div>
+    </div>
+
+    <div id="iphone">
+        <div class="activity-list">
+            <div class="activity" data-activity="Gaming">
+                <div class="thumbnail" style="background: url('assets/games.png') center/cover;"></div>
+                <div class="activity-name">Gaming</div>
+                <div class="time-select">
+                    <button data-time="Morning">Morning</button>
+                    <button data-time="Afternoon">Afternoon</button>
+                    <button data-time="Evening">Evening</button>
+                </div>
+            </div>
+            <div class="activity" data-activity="Gym">
+                <div class="thumbnail" style="background: url('assets/dumbbell.png') center/cover;"></div>
+                <div class="activity-name">Gym</div>
+                <div class="time-select">
+                    <button data-time="Morning">Morning</button>
+                    <button data-time="Afternoon">Afternoon</button>
+                    <button data-time="Evening">Evening</button>
+                </div>
+            </div>
+            <div class="activity" data-activity="Burger King">
+                <div class="thumbnail" style="background: url('assets/hamburger.png') center/cover;"></div>
+                <div class="activity-name">Burger King</div>
+                <div class="time-select">
+                    <button data-time="Morning">Morning</button>
+                    <button data-time="Afternoon">Afternoon</button>
+                    <button data-time="Evening">Evening</button>
+                </div>
+            </div>
+        </div>
+        <div id="recentActivities" style="font-size:14px; color:#fff; height: 180px; overflow: hidden;margin-top:10px">
+            <h3 style="margin-bottom:10px; font-size:16px;">Recent Activities</h3>
+            <ul id="activityLog" style="list-style:none; padding:0; margin:0;overflow-y: auto;height: 150px;"></ul>
+        </div>
+    </div>
+
+    <div class="bottom-apps">
+        <div class="search-bar">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <span>Search</span>
+        </div>
+
+        <div class="dock">
+            <div class="dock-app phone-app">
+                📞
+            </div>
+            <div class="dock-app safari-app">
+                <div class="safari-circle"></div>
+                <div class="safari-needle"></div>
+            </div>
+            <div class="dock-app messages-app">
+                <div class="message-bubble"></div>
+                <div class="notification-badge">52</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize host page when document is ready
+        $(document).ready(function () {
+            initializeHostPage();
+        });
+    </script>
 </body>
+
 </html>

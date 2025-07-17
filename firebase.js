@@ -270,4 +270,8 @@ function initializePartyPage() {
       }
     }
   });
+
+  // Update date and time
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
 }
